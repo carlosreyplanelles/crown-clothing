@@ -39,6 +39,7 @@ export function SignInForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log("handleSubmit");
       await validateAuthUserWithEmailAndPaswsword(email, password);
       setFormFields(defaultValues);
     } catch (error) {

@@ -11,6 +11,8 @@ import { CheckoutCard } from "../../components/checkout-card/checkout-card.compo
 export function Checkout() {
   const { cartItems, cartTotal } = useContext(CartContext);
 
+  console.log(useContext(CartContext));
+
   return (
     <CheckoutContainer>
       <CheckoutHeader>

@@ -1,5 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 
+import { useEffect } from "react";
+import {
+  createUserDoc,
+  onAuthStateChangedHandler,
+} from "./utils/firebase/firebase.utils";
+
 import Home from "./routes/home/home.component";
 import NavigationBar from "./routes/navigationBar/navigationBar.component";
 import Shop from "./routes/shop/shop.component";

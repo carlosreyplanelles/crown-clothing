@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useReducer, useEffect } from "react";
 
 export const CartContext = createContext({
   showMiniCart: false,
@@ -10,6 +10,10 @@ export const CartContext = createContext({
   clearItemFromBasket: () => {},
   cartTotal: 0,
 });
+export const CART_ACTION_TYPES = {
+  SET_CART_ITEMS: "SET_CART_ITEMS",
+  TOGGLE_MINICART: "TOGGLE_MINICART",
+};
 
 const addCartItem = (cartItems, item) => {
   //find the item into cartItems
@@ -55,40 +59,94 @@ const clearItemFromBasket = (cartItems, itemToRemove) => {
   }
 };
 
-export const CartProvider = ({ children }) => {
-  const [showMiniCart, setShowMiniCart] = useState(false);
-  const [cartItems, setCartItems] = useState([]);
-  const [itemsCount, setItemsCount] = useState(0);
-  const [cartTotal, setCartTotal] = useState(0);
+const calculateItemsCount = (cartItems) => {
+  return cartItems.reduce(
+    (itemsInBasket, item) => itemsInBasket + item.quantity,
+    0
+  );
+};
 
-  const addToCart = (itemToAdd) => {
-    setCartItems(addCartItem(cartItems, itemToAdd));
+const calculateItemsPrice = (cartItems) => {
+  return cartItems.reduce(
+    (total, cartItem) => total + cartItem.quantity * cartItem.price,
+    0
+  );
+};
+
+const BasketReducer = (state, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case "SET_CART_ITEMS":
+      return {
+        ...state,
+        ...payload,
+      };
+
+    case "TOGGLE_MINICART":
+      console.log(payload);
+      return {
+        ...state,
+        ...payload,
+      };
+
+    default:
+      throw new Error(`Unhandeled type ${type} in BasketReducer`);
+  }
+};
+
+const BASKET_INITIAL = {
+  showMiniCart: false,
+  cartItems: [],
+  itemsCount: 0,
+  cartTotal: 0,
+};
+
+export const CartProvider = ({ children }) => {
+  //USESTATE EXAMPLE
+  //const [showMiniCart, setShowMiniCart] = useState(false);
+  //const [cartItems, setCartItems] = useState([]);
+  //const [itemsCount, setItemsCount] = useState(0);
+  //const [cartTotal, setCartTotal] = useState(0)
+  //REDUCERS
+  const [{ cartItems, cartTotal, itemsCount, showMiniCart }, dispatcher] =
+    useReducer(BasketReducer, BASKET_INITIAL);
+  const updateCart = (newCartItems) => {
+    const updatedItemsCount = calculateItemsCount(newCartItems);
+    const updatedBasketPrice = calculateItemsPrice(newCartItems);
+    const payload = {
+      cartItems: newCartItems,
+      itemsCount: updatedItemsCount,
+      cartTotal: updatedBasketPrice,
+    };
+    dispatcher({
+      type: CART_ACTION_TYPES.SET_CART_ITEMS,
+      payload: payload,
+    });
+  };
+
+  const setShowMiniCart = () => {
+    const newShowMinicart = !showMiniCart;
+    dispatcher({
+      type: CART_ACTION_TYPES.TOGGLE_MINICART,
+      payload: { showMiniCart: newShowMinicart },
+    });
+  };
+
+  const addToCart = (item) => {
+    const newCartItems = addCartItem(cartItems, item);
+    updateCart(newCartItems);
   };
 
   const removeCartItem = (item) => {
-    setCartItems(removeItem(cartItems, item));
+    const newCartItems = removeItem(cartItems, item);
+    updateCart(newCartItems);
   };
 
   const removeCartItemFromBasket = (item) => {
-    setCartItems(clearItemFromBasket(cartItems, item));
+    const newCartItems = clearItemFromBasket(cartItems, item);
+    updateCart(newCartItems);
   };
-
-  useEffect(() => {
-    setItemsCount(
-      cartItems.reduce(
-        (itemsInBasket, item) => itemsInBasket + item.quantity,
-        0
-      )
-    );
-  }, [cartItems]);
-
-  useEffect(() => {
-    const updatedCartTotal = cartItems.reduce(
-      (total, cartItem) => total + cartItem.quantity * cartItem.price,
-      0
-    );
-    setCartTotal(updatedCartTotal);
-  }, [cartItems]);
 
   const value = {
     showMiniCart,

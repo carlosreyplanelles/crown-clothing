@@ -71,7 +71,6 @@ export const getCategoriesAndDocs = async () => {
     acc[title.toLowerCase()] = items;
     return acc;
   }, {});
-  console.log("CategoryMap:" + categoryMap);
   return categoryMap;
 };
 
