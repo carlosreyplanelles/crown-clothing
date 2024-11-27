@@ -11,18 +11,13 @@ import {
   LogoContainer,
   NavLink,
 } from "./navigationBar.styles";
-import { UserContext } from "../../contexts/user.context";
 import { SignOutHandler } from "../../utils/firebase/firebase.utils";
 import { CartContext } from "../../contexts/cart.context";
+import { useSelector } from "react-redux";
 
 const NavigationBar = () => {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const currentUser = useSelector((state) => state.user.currentUser);
   const { showMiniCart } = useContext(CartContext);
-
-  const signOutHandler = async () => {
-    await SignOutHandler();
-    setCurrentUser(null);
-  };
 
   return (
     <Fragment>
@@ -33,7 +28,7 @@ const NavigationBar = () => {
         <NavLinksContainer>
           <NavLink to="/shop">SHOP</NavLink>
           {currentUser ? (
-            <NavLink as="span" onClick={signOutHandler}>
+            <NavLink as="span" onClick={SignOutHandler}>
               SIGN OUT
             </NavLink>
           ) : (

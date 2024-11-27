@@ -11,8 +11,24 @@ import NavigationBar from "./routes/navigationBar/navigationBar.component";
 import Shop from "./routes/shop/shop.component";
 import Authentication from "./routes/authentication/authentication.component";
 import { Checkout } from "./routes/checkout/checkout.component";
+import { setCurrentUser } from "./store/user/user.action";
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChangedHandler((user) => {
+      if (user) {
+        //DisplayName Option 1 - Create a new document into a database collection to add the displaName info
+        createUserDoc(user);
+      }
+      /*DisplayName option 2 - sent the display name for the user that has been created through the form
+      user.displayName = displayName;*/
+      dispatch(setCurrentUser(user));
+      return unsubscribe;
+    });
+  }, []);
+
   return (
     <Routes>
       <Route path="/" element={<NavigationBar />}>
