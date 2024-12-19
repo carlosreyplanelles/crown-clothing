@@ -1,4 +1,5 @@
 import { CART_ACTION_TYPES } from "./cart.types";
+import { createAction } from "../../utils/reducers/reducers.utils";
 
 const calculateItemsCount = (cartItems) => {
   return cartItems.reduce(
@@ -59,39 +60,26 @@ const clearItemFromBasket = (cartItems, itemToRemove) => {
   }
 };
 
-const updateCart = (newCartItems) => {
-  const updatedItemsCount = calculateItemsCount(newCartItems);
-  const updatedBasketPrice = calculateItemsPrice(newCartItems);
-  const payload = {
-    cartItems: newCartItems,
-    itemsCount: updatedItemsCount,
-    cartTotal: updatedBasketPrice,
-  };
-  return {
-    type: CART_ACTION_TYPES.SET_CART_ITEMS,
-    payload: payload,
-  };
+const createUpdateCartAction = (newCartItems) => {
+  return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
 };
 
 export const setShowMiniCart = (newShowMinicart) => {
   console.log(newShowMinicart);
-  return {
-    type: CART_ACTION_TYPES.TOGGLE_MINICART,
-    payload: newShowMinicart,
-  };
+  return createAction(CART_ACTION_TYPES.TOGGLE_MINICART, newShowMinicart);
 };
 
 export const addToCart = (cartItems, item) => {
   const newCartItems = addCartItem(cartItems, item);
-  return updateCart(newCartItems);
+  return createUpdateCartAction(newCartItems);
 };
 
 export const removeCartItem = (cartItems, item) => {
   const newCartItems = removeItem(cartItems, item);
-  return updateCart(newCartItems);
+  return createUpdateCartAction(newCartItems);
 };
 
 export const removeCartItemFromBasket = (cartItems, item) => {
   const newCartItems = clearItemFromBasket(cartItems, item);
-  return updateCart(newCartItems);
+  return createUpdateCartAction(newCartItems);
 };

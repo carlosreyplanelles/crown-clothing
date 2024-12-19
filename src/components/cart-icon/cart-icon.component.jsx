@@ -3,12 +3,16 @@ import { CartIconContainer, ShoppingIcon, ItemCount } from "./cart-icon.styles";
 
 import { CartContext } from "../../contexts/cart.context";
 import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../store/cart/cart.selector";
+import {
+  calculateItemsCount,
+  getShowMiniCart,
+} from "../../store/cart/cart.selector";
 import { setShowMiniCart } from "../../store/cart/cart.action";
 
 export function CartIcon() {
   const dispatch = useDispatch();
-  const { showMiniCart, itemsCount } = useSelector(getCart);
+  const showMiniCart = useSelector(getShowMiniCart);
+  const itemsCount = useSelector(calculateItemsCount);
   const toggleShowMiniCart = () => {
     dispatch(setShowMiniCart(!showMiniCart));
   };

@@ -8,9 +8,14 @@ import {
 import { CartContext } from "../../contexts/cart.context";
 import { CheckoutCard } from "../../components/checkout-card/checkout-card.componen";
 import { useSelector } from "react-redux";
+import {
+  calculateCartTotal,
+  getCartItems,
+} from "../../store/cart/cart.selector";
 
 export function Checkout() {
-  const { cartItems, cartTotal } = useSelector((state) => state.cart);
+  const cartItems = useSelector(getCartItems);
+  const cartTotal = useSelector(calculateCartTotal);
   console.log("Checkout - cartItems", cartItems);
 
   return (
