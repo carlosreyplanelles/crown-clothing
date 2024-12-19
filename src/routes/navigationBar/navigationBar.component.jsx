@@ -14,10 +14,11 @@ import {
 import { SignOutHandler } from "../../utils/firebase/firebase.utils";
 import { CartContext } from "../../contexts/cart.context";
 import { useSelector } from "react-redux";
+import { getCart } from "../../store/cart/cart.selector";
 
 const NavigationBar = () => {
   const currentUser = useSelector((state) => state.user.currentUser);
-  const { showMiniCart } = useContext(CartContext);
+  const showMiniCart = useSelector((state) => state.cart.showMiniCart);
 
   return (
     <Fragment>
