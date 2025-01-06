@@ -1,20 +1,6 @@
 import { CART_ACTION_TYPES } from "./cart.types";
 import { createAction } from "../../utils/reducers/reducers.utils";
 
-const calculateItemsCount = (cartItems) => {
-  return cartItems.reduce(
-    (itemsInBasket, item) => itemsInBasket + item.quantity,
-    0
-  );
-};
-
-const calculateItemsPrice = (cartItems) => {
-  return cartItems.reduce(
-    (total, cartItem) => total + cartItem.quantity * cartItem.price,
-    0
-  );
-};
-
 const addCartItem = (cartItems, item) => {
   console.log("cartItems", cartItems);
   //find the item into cartItems

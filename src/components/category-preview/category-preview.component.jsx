@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { selectCategoriesIsLoading } from "../../store/categories/categories.selector";
 import { ProductCard } from "../product-card/product-card.component";
 import {
   Title,
@@ -5,7 +7,11 @@ import {
   CategoryPreviewContainer,
 } from "./category-preview.styles";
 
+import Spinner from "../spinner/spinner.component";
+import { Fragment } from "react";
+
 export function CategoryPreview({ title, products }) {
+  const isLoading = useSelector(selectCategoriesIsLoading);
   return (
     <CategoryPreviewContainer>
       <h2>

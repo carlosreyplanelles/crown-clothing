@@ -1,15 +1,25 @@
 import { createSelector } from "reselect";
 
-const categoriesArrayMemoSelector = (state) => state.categories;
+const categoriesReducerMemoSelector = (state) => state.categories;
+
+const categoriesArrayMemoSelector = createSelector(
+  [categoriesReducerMemoSelector],
+  (categoriesReducer) => categoriesReducer.categoriesArray
+);
 
 export const selectCategoriesMap = createSelector(
   [categoriesArrayMemoSelector],
-  (categoriesReducer) => {
+  (categoriesArray) => {
     console.log("selector triggered");
-    return categoriesReducer.categoriesArray.reduce((acc, category) => {
+    return categoriesArray.reduce((acc, category) => {
       const { title, items } = category;
       acc[title.toLowerCase()] = items;
       return acc;
     }, {});
   }
+);
+
+export const selectCategoriesIsLoading = createSelector(
+  [categoriesReducerMemoSelector],
+  (categoriesReducer) => categoriesReducer.isLoading
 );
