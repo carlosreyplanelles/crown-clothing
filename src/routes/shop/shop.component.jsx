@@ -5,14 +5,14 @@ import { useDispatch } from "react-redux";
 import CategoriesPreview from "../categories-preview/categories-preview.component";
 import { Category } from "../category/category.component";
 import { getCategoriesAndDocs } from "../../utils/firebase/firebase.utils";
-import { fetchCategoriesAsync } from "../../store/categories/categories.action";
+import { fetchCategoriesStart } from "../../store/categories/categories.action";
 
 export default function Shop() {
   const dispatch = useDispatch();
 
   useEffect(() => {
     //ALWAYS WRAP ASYNC CALLS INTO USE EFFECT IN A LOCAL VARIABLE!!!(in case you are not using redux thunk)
-    dispatch(fetchCategoriesAsync());
+    dispatch(fetchCategoriesStart());
   }, []);
 
   return (
